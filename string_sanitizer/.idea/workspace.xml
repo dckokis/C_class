@@ -12,14 +12,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="105eda96-ced4-4c9b-9a21-da2d47505114" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../guess_the_number/CMakeLists.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../guess_the_number/main.c" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../polynomial_value/CMakeLists.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../polynomial_value/main.c" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../quick_sort/CMakeLists.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../quick_sort/main.c" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/main.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../quick_sort/cmake-build-debug/Input.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../quick_sort/cmake-build-debug/quick_sort.exe" beforeDir="false" afterPath="$PROJECT_DIR$/../quick_sort/cmake-build-debug/quick_sort.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../quick_sort/cmake-build-debug/quick_sort.ilk" beforeDir="false" afterPath="$PROJECT_DIR$/../quick_sort/cmake-build-debug/quick_sort.ilk" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../quick_sort/cmake-build-debug/quick_sort.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/../quick_sort/cmake-build-debug/quick_sort.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../quick_sort/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/../quick_sort/main.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/main.c" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,6 +30,11 @@
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$/.." value="main" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="ProblemsViewState">
@@ -53,11 +57,6 @@
     <property name="settings.editor.selected.configurable" value="CPPToolchains" />
   </component>
   <component name="RunManager">
-    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true">
-      <method v="2">
-        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="string_sanitizer" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="string_sanitizer" TARGET_NAME="string_sanitizer" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="string_sanitizer" RUN_TARGET_NAME="string_sanitizer">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
@@ -79,29 +78,53 @@
       <updated>1603702861479</updated>
       <workItem from="1603702869252" duration="9000" />
       <workItem from="1603703401122" duration="2249000" />
+      <workItem from="1604303015257" duration="2587000" />
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="main" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="WindowStateProjectService">
     <state x="549" y="172" key="FileChooserDialogImpl" timestamp="1603706180809">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
     <state x="549" y="172" key="FileChooserDialogImpl/0.0.1536.834@0.0.1536.834" timestamp="1603706180809" />
-    <state width="1493" height="213" key="GridCell.Tab.0.bottom" timestamp="1603707256154">
+    <state width="1493" height="188" key="GridCell.Tab.0.bottom" timestamp="1604307988952">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state width="1493" height="213" key="GridCell.Tab.0.bottom/0.0.1536.834@0.0.1536.834" timestamp="1603707256154" />
-    <state width="1493" height="213" key="GridCell.Tab.0.center" timestamp="1603707256154">
+    <state width="1493" height="188" key="GridCell.Tab.0.bottom/0.0.1536.834@0.0.1536.834" timestamp="1604307988952" />
+    <state width="1493" height="188" key="GridCell.Tab.0.center" timestamp="1604307988951">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state width="1493" height="213" key="GridCell.Tab.0.center/0.0.1536.834@0.0.1536.834" timestamp="1603707256154" />
-    <state width="1493" height="213" key="GridCell.Tab.0.left" timestamp="1603707256154">
+    <state width="1493" height="188" key="GridCell.Tab.0.center/0.0.1536.834@0.0.1536.834" timestamp="1604307988951" />
+    <state width="1493" height="188" key="GridCell.Tab.0.left" timestamp="1604307988951">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state width="1493" height="213" key="GridCell.Tab.0.left/0.0.1536.834@0.0.1536.834" timestamp="1603707256154" />
-    <state width="1493" height="213" key="GridCell.Tab.0.right" timestamp="1603707256154">
+    <state width="1493" height="188" key="GridCell.Tab.0.left/0.0.1536.834@0.0.1536.834" timestamp="1604307988951" />
+    <state width="1493" height="188" key="GridCell.Tab.0.right" timestamp="1604307988951">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state width="1493" height="213" key="GridCell.Tab.0.right/0.0.1536.834@0.0.1536.834" timestamp="1603707256154" />
+    <state width="1493" height="188" key="GridCell.Tab.0.right/0.0.1536.834@0.0.1536.834" timestamp="1604307988951" />
   </component>
 </project>

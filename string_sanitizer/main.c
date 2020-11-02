@@ -2,8 +2,8 @@
 #include <ctype.h>
 #define N 1000
 // пунктуацию дабавить, новое предложение с большой буквы, убирать пробелы
-// в начале и в конце строки, передавать размер строки в функцию
-void str_sanitize(char *string, size_t size)
+// в начале и в конце строки
+void str_sanitize(char *string)
 {
     int r, w;
     int space = 0;
@@ -11,14 +11,19 @@ void str_sanitize(char *string, size_t size)
         if (isspace(string[r]) == 0){
             string[w++] = string[r];
             space = 0;
-        } else{
-            if(space == 0){
+        }else{
+            if(space == 0 && w != 0){
                 string[w++] = string[r];
             }
+            if(w == 0){}
             space = 1;
         }
     }
-    string[w] = '\0';
+    if(isspace(string[w - 1] != 0)){
+        string[w - 1] = '\0';
+    }else {
+        string[w] = '\0';
+    }
 }
 
 int main()
@@ -26,8 +31,7 @@ int main()
     char str[N];
     printf("Input string:\n");
     gets_s(str, N);
-    size_t size = sizeof(str);
-    str_sanitize(str, size);
+    str_sanitize(str);
     printf("\n%s", str);
     return 0;
 }
