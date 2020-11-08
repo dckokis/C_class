@@ -61,6 +61,7 @@ void quick_sort(void* arr, unsigned int len_arr,
         }
     }
     while (i <= j);
+    // recursion
         if (len_arr > i) quick_sort((char *) arr + i * size_elem, len_arr - i, size_elem, cmp);
         if (j > 0) quick_sort((char *) arr, j + 1, size_elem, cmp);
 }
