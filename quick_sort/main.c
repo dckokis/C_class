@@ -41,48 +41,28 @@ void swap(void* a, void* b, const size_t size) {
 // в зависимости от используемого типа данных в массиве
 void quick_sort(void* arr, unsigned int len_arr,
                 unsigned int size_elem, int (*cmp)(void*, void*)) {
-    if(len_arr == 1){
+    if (len_arr == 1) {
         return;
     }
     unsigned int i = 0; // индексы левой половины
     unsigned int j = len_arr - 1; // индексы правой половины
-    void *median = (char *)arr + (char)(len_arr/ 2) * size_elem;
-    void *left = (char *)arr;
-    void *right = (char *)arr + (char)(len_arr - 1) * size_elem;
-    while (i < j && i < len_arr - 1 && j > 0) {
-        if (cmp(median, left) == 1 && cmp(median, right) == -1) {
+    void *median = (char *) arr + (char) (len_arr / 2) * size_elem;
+    do {
+        while (cmp((char *) arr + j * size_elem, median) > 0) { //right > median
+            --j;
+        }
+        while (cmp((char *) arr + i * size_elem, median) < 0) { //left < median
+            i++;
+        }
+        if (i <= j) {  // after while i <= j thereat we must swap left and right
+            swap((char *) arr + i * size_elem, (char *) arr + j * size_elem, size_elem);
             i++;
             --j;
-            continue;
-        } else if (cmp(median, left) == -1 && cmp(median, right) == 1) {
-            swap(left, right, size_elem);
-            i++;
-            --j;
-        } else if (cmp(median, left) == cmp(median, right)) {// нужен еще один else
-            if (cmp(left, right) == 1){
-                --j;
-                continue;
-            } else if (cmp(left, right) == -1){
-                i++;
-                continue;
-            } else if (cmp(left, right) == 0){
-                if (cmp(median, left) == 1){
-                    i++;
-                    continue;
-                } else if (cmp(median, left) == -1){
-                    --j;
-                    continue;
-                }
-            }
-            continue;
         }
     }
-
-    swap(median, right, size_elem);
-    unsigned int size_left = len_arr / 2;
-    unsigned int size_right = len_arr - size_left;
-    quick_sort((char *)arr, size_left, size_elem, cmp);
-    quick_sort((char *)arr + (char)size_right * size_elem, size_right, size_elem, cmp);
+    while (i <= j);
+        if (len_arr > i) quick_sort((char *) arr + i * size_elem, len_arr - i, size_elem, cmp);
+        if (j > 0) quick_sort((char *) arr, j + 1, size_elem, cmp);
 }
 int main() {
     double A[N] = {0};
@@ -101,12 +81,13 @@ int main() {
         printf("%g ", A[i]);
         amount ++;
     }
+    printf("\n");
     if (amount != length){
         exit(1);
     }
     size_t size_elem = sizeof(double);
     quick_sort(A, length, size_elem, double_cmp);
-    printf("Sorted array:");
+    printf("Sorted array: ");
     for (i = 0; i < length; i++){
         printf("%g ", A[i]);
     }
