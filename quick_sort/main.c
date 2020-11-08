@@ -74,21 +74,21 @@ int main() {
     }
     int i;
     unsigned int length;
-    fscanf_s(stream, "%d", &length);
+    fscanf_s(stream, "%d", &length); // read length of array from file
     unsigned  int amount  = 0;
-    for (i = 0; i < length; i++) {
+    for (i = 0; i < length; i++) { // read array from file
         fscanf_s(stream, "%lf", &A[i]);
         printf("%g ", A[i]);
         amount ++;
     }
-    printf("\n");
+    printf("\n"); // print array
     if (amount != length){
         exit(1);
     }
     size_t size_elem = sizeof(double);
-    quick_sort(A, length, size_elem, double_cmp);
+    quick_sort(A, length, size_elem, double_cmp); // sorting array
     printf("Sorted array: ");
-    for (i = 0; i < length; i++){
+    for (i = 0; i < length; i++){ // printing sorted array
         printf("%g ", A[i]);
     }
     return 0;
