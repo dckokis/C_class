@@ -72,7 +72,7 @@ Pointer stack_peek(Stack *pstack) {
 }
 
 int main() {
-    { //test stack_peek with strings
+    {
         Stack test_stack;
         stack_create(&test_stack);
         stack_push(&test_stack, "abc");
@@ -81,14 +81,14 @@ int main() {
         assert(strcmp(stack_peek(&test_stack), "ghi") == 0);
         stack_destroy(&test_stack);
     }
-    { //test stack_peek with int
+    {
         Stack test_stack;
         stack_create(&test_stack);
         stack_push(&test_stack, (Pointer) 58);
         assert((int) stack_peek(&test_stack) == 58);
         stack_destroy(&test_stack);
     }
-    { //test stack_pop and stack_size
+    {
         Stack test_stack;
         stack_create(&test_stack);
         stack_push(&test_stack, "abc");
@@ -99,7 +99,7 @@ int main() {
         assert(stack_size(&test_stack) == 2);
         stack_destroy(&test_stack);
     }
-    { //test stack_size and stack_destroy
+    {
         Stack test_stack;
         stack_create(&test_stack);
         stack_push(&test_stack, "abc");
@@ -109,5 +109,7 @@ int main() {
         stack_destroy(&test_stack);
         assert(stack_size(&test_stack) == -1);
     }
+
+
     return 0;
 }
