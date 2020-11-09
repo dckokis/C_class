@@ -5,7 +5,7 @@
 // ситуации когда dest раньше source и наоборот
 // создать структуру с множеством полей и сортировать ее по конкретному полю(написать разные компараторы int/double лексикографический), читать данные из файла в структуру
 // сделать функцию которая из FILE * прочитает структуру
-int int_cmp(void *x, void *y) {
+int int_cmp(void *x, void *y) {  // переделать через вычитание
     int x_value = *(int*)x;
     int y_value = *(int*)y;
 
@@ -44,7 +44,7 @@ void swap(void* a, void* b, const size_t size) { // сделать с memcpy
 // Функцию необходимо вызывать с соответствующей функцией сравнения для double/integer
 // в зависимости от используемого типа данных в массиве
 void quick_sort(void* arr, unsigned int len_arr,
-                unsigned int size_elem, int (*cmp)(void*, void*)) {
+                unsigned int size_elem, int (*cmp)(void*, void*)) { // в конце медиана должна менять место
     if (len_arr == 1) {
         return;
     }
@@ -52,22 +52,26 @@ void quick_sort(void* arr, unsigned int len_arr,
     unsigned int j = len_arr - 1; // индексы правой половины
     void *median = (char *) arr + (char) (len_arr / 2) * size_elem;
     do {
+
+        while (cmp((char *) arr + i * size_elem, median) < 0) { //left < median
+            ++i;
+        }
         while (cmp((char *) arr + j * size_elem, median) > 0) { //right > median
             --j;
         }
-        while (cmp((char *) arr + i * size_elem, median) < 0) { //left < median
-            i++;
-        }
         if (i <= j) {  // after while i <= j thereat we must swap left and right
             swap((char *) arr + i * size_elem, (char *) arr + j * size_elem, size_elem);
-            i++;
+            ++i;
             --j;
         }
+
     }
     while (i <= j);
+
     // recursion
     if (len_arr > i) quick_sort((char *) arr + i * size_elem, len_arr - i, size_elem, cmp); //right
     if (j > 0) quick_sort((char *) arr, j + 1, size_elem, cmp); // left
+
 }
 int main() {
     double A[N] = {0};
