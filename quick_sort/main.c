@@ -1,6 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #define N 1000
+// написать свой memcpy и вызывать его в swap. Корректно обрабатывать ситуацию когда одна часть памяти нахлестывается на другую
+// ситуации когда dest раньше source и наоборот
+// создать структуру с множеством полей и сортировать ее по конкретному полю(написать разные компараторы int/double лексикографический), читать данные из файла в структуру
+// сделать функцию которая из FILE * прочитает структуру
 int int_cmp(void *x, void *y) {
     int x_value = *(int*)x;
     int y_value = *(int*)y;
@@ -27,7 +31,7 @@ int double_cmp(void *x, void *y) {
     }
 }
 
-void swap(void* a, void* b, const size_t size) {
+void swap(void* a, void* b, const size_t size) { // сделать с memcpy
     for (size_t i = 0; i < size; i++){
         char *i1 = (char*)a + i;
         char *i2 = (char*)b + i;
@@ -37,7 +41,7 @@ void swap(void* a, void* b, const size_t size) {
     }
 }
 
-// Функцию необходимо вызывать с соответствующей функцие сравнения для double/integer
+// Функцию необходимо вызывать с соответствующей функцией сравнения для double/integer
 // в зависимости от используемого типа данных в массиве
 void quick_sort(void* arr, unsigned int len_arr,
                 unsigned int size_elem, int (*cmp)(void*, void*)) {
@@ -62,8 +66,8 @@ void quick_sort(void* arr, unsigned int len_arr,
     }
     while (i <= j);
     // recursion
-        if (len_arr > i) quick_sort((char *) arr + i * size_elem, len_arr - i, size_elem, cmp);
-        if (j > 0) quick_sort((char *) arr, j + 1, size_elem, cmp);
+    if (len_arr > i) quick_sort((char *) arr + i * size_elem, len_arr - i, size_elem, cmp); //right
+    if (j > 0) quick_sort((char *) arr, j + 1, size_elem, cmp); // left
 }
 int main() {
     double A[N] = {0};
