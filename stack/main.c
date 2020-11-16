@@ -61,9 +61,21 @@ Pointer stack_peek(Stack *pstack) {
 
 /* Снять значение с вершины стека. Если стек пуст, возвращает 0 */
 Pointer stack_pop(Stack *pstack) {
+    if (pstack->lenght == 0) return 0;
     Pointer peek = stack_peek(pstack);
     pstack->arr[pstack->lenght - 1] = NULL;
     pstack->lenght--;
+    // reduce stack
+    if (pstack->lenght < pstack->capacity / 4) {
+        unsigned newcapacity = pstack->capacity / 4;
+        Pointer *newarr = realloc(pstack->arr,newcapacity * sizeof(Pointer));
+        if (newarr == NULL) {
+            printf("Memory error\n");
+            exit(1);
+        }
+        pstack->arr = newarr;
+        pstack->capacity = newcapacity;
+    }
     return peek;
 }
 
@@ -106,6 +118,13 @@ int main() {
         assert(stack_size(&test_stack) == 3);
         stack_destroy(&test_stack);
         assert(stack_size(&test_stack) == -1);
+    }
+    {
+        Stack test_stack;
+        stack_create(&test_stack);
+        assert(stack_size(&test_stack) == 0);
+        assert(stack_pop(&test_stack) == 0);
+        stack_destroy(&test_stack);
     }
     return 0;
 }
