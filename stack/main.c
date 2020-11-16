@@ -66,8 +66,8 @@ Pointer stack_pop(Stack *pstack) {
     pstack->arr[pstack->lenght - 1] = NULL;
     pstack->lenght--;
     // reduce stack
-    if (pstack->lenght < pstack->capacity / 4) {
-        unsigned newcapacity = pstack->capacity / 4;
+    if (pstack->lenght < pstack->capacity / 4) { // посчитать сложность
+        unsigned newcapacity = pstack->capacity / 2;
         Pointer *newarr = realloc(pstack->arr,newcapacity * sizeof(Pointer));
         if (newarr == NULL) {
             printf("Memory error\n");
