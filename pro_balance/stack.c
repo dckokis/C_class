@@ -2,11 +2,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-//typedef struct tStack{
-//unsigned lenght;
-//unsigned capacity;
-//Pointer *arr;
-//} Stack;
 /* Создать пустой стек */
 void stack_create(Stack *pstack){
     pstack->lenght = 0;

@@ -1,7 +1,12 @@
 #ifndef STACK_STACK_H
 #define STACK_STACK_H
+#include <stdlib.h>
 typedef void *Pointer;
-typedef struct Stack;
+typedef struct tStack{
+    unsigned lenght;
+    unsigned capacity;
+    Pointer *arr;
+} Stack;
 void stack_create(Stack *s);
 void stack_destroy(Stack *s);
 size_t stack_size(Stack *s);
