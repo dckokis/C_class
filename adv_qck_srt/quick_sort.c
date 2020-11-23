@@ -26,7 +26,7 @@ void quick_sort(void *arr, unsigned int len_arr,
     }
     unsigned int i = 0; // индексы левой половины
     unsigned int j = len_arr - 1; // индексы правой половины
-    int median = (len_arr / 2);
+    unsigned int median = (len_arr / 2);
     do {
         while (cmp((char *) arr + i * size_elem, (char *) arr + median * size_elem) < 0) { //left < median
             i++;
@@ -43,7 +43,4 @@ void quick_sort(void *arr, unsigned int len_arr,
     // recursion
     if (len_arr > i) quick_sort((char *) arr + i * size_elem, median, size_elem, cmp); //right
     if (j > 0) quick_sort((char *) arr, median + 1, size_elem, cmp); // left
-}
-int main(){
-    return 0;
 }
