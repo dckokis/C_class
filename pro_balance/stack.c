@@ -6,7 +6,7 @@
 void stack_create(Stack *pstack){
     pstack->lenght = 0;
     pstack->capacity = 1;
-    pstack->arr = malloc(pstack->capacity*sizeof(int));
+    pstack->arr = malloc(pstack->capacity*sizeof(Pointer));
     if (pstack->arr == NULL){
         printf("Memory error\n");
         exit(1);

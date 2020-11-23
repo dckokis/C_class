@@ -1,19 +1,22 @@
 #include <assert.h>
 #include <stdio.h>
+#include <string.h>
 #define N 100
 #include "stack.h"
 
-// можно сделать массив флажков, на j место ставить либо 0 либо 1.
-///* Функция возвращает 1, если скобочное выражение корректно, или 0 в противном случае. *///
 
-int check_brackets(char *expression) {
+///* Функция возвращает 1, если скобочное выражение корректно, или 0 в противном случае. *///
+// кладем открывающую скобку на стек, смотрим закрывающую, снимаем элемент, смотрим парные или нет
+// (()[]{>
+// в конце смотрим пустой ли стек
+int check_brackets(char *expression, size_t lenght) {
     char *open_bracket = "([{<";
     char *closed_bracket = ")]}>";
 
     Stack brackets_stack;
     stack_create(&brackets_stack);
-
-    for (int i = 0; i < sizeof(expression); ++i) {
+    // sizeof(char) можно убрать
+    for (int i = 0; i < lenght; ++i) {
         for(int j = 0; j < 4; j++) {
             if (expression + i * sizeof(char) == open_bracket + j * sizeof(char) || expression + i * sizeof(char) == closed_bracket + j * sizeof(char)){
                 stack_push(&brackets_stack, expression + i * sizeof(char));
@@ -41,8 +44,9 @@ int check_brackets(char *expression) {
     else return 0;
 }
 int main() {
-    char *expression;
-    scanf("%s", &expression);
-    printf("%d\n", check_brackets(expression));
+    char *expression = malloc(100);
+    scanf("%s", expression);
+    size_t len = strlen(expression);
+    printf("%d\n", check_brackets(expression, len));
     return 0;
 }
