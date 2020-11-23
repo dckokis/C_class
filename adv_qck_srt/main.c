@@ -1,11 +1,6 @@
 #include <stdio.h>
-#include <string.h>
 #include "quick_sort.h"
 #define N 5
-// написать свой memcpy и вызывать его в swap. Корректно обрабатывать ситуацию когда одна часть памяти нахлестывается на другую
-// ситуации когда dest раньше source и наоборот
-// создать структуру с множеством полей и сортировать ее по конкретному полю(написать разные компараторы int/double лексикографический), читать данные из файла в структуру
-// сделать функцию которая из FILE * прочитает структуру
 typedef struct book {
     char *name; //name of the book
     char *author; //name of the author
@@ -13,9 +8,11 @@ typedef struct book {
     char *country; //country where the book was written
     int year; //year when the book was written
 };
-
-int author_cmp(struct book a,struct book b) {
-    return strcmp(a.author, b.author);
+//cmp for string
+int year_cmp(void* a, void* b) {
+    struct book* abook = a;
+    struct book* bbook = b;
+    return abook->year - bbook->year;
 }
 
 int main(){
@@ -51,7 +48,7 @@ int main(){
     book_shelf[4].country = "United States";
     book_shelf[4].year = 1953;
 
-    quick_sort(book_shelf, 5, sizeof(struct book), (int (*)(void *, void *)) author_cmp);
+    quick_sort(book_shelf, 5, sizeof(struct book), (int (*)(void *, void *)) year_cmp);
     for(int i = 0; i < 5; i++){
         printf("Name:%s\tAuthor:%s\tGenre:%s\tCountry:%s\tYear:%d\n", book_shelf[i].name, book_shelf[i].author,
                book_shelf[i].genre, book_shelf[i].country, book_shelf[i].year);
