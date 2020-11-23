@@ -13,6 +13,11 @@ typedef struct book {
     char *country; //country where the book was written
     int year; //year when the book was written
 };
+
+int author_cmp(struct book* book1, struct book* book2) {
+    return strcmp(book1->author, book2->author);
+}
+
 int main(){
     struct book book_shelf[N];
     // War and peace
@@ -46,7 +51,7 @@ int main(){
     book_shelf[5].country = "United States";
     book_shelf[5].year = 1953;
 
-    quick_sort(book_shelf->author, 5, sizeof(book_shelf->author), (int (*)(void *, void *)) strcmp);
+    quick_sort(book_shelf, 5, sizeof(struct book), (int (*)(void *, void *)) author_cmp);
     for(int i = 0; i <=  5; i++){
         printf("Name:%s \t Author:%s \t Genre:%s \t Country:%s \t Year:%d \n", book_shelf[i].name, book_shelf[i].author,
                book_shelf[i].genre, book_shelf[i].country, book_shelf[i].year);
