@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-/* Создать пустой стек */
+///* Создать пустой стек *///
 void stack_create(Stack *pstack){
     pstack->lenght = 0;
     pstack->capacity = 1;
@@ -13,7 +13,7 @@ void stack_create(Stack *pstack){
     }
 }
 
-/* Уничтожить стек, освободив выделенную память */
+///* Уничтожить стек, освободив выделенную память *///
 void stack_destroy(Stack *pstack){
     free(pstack->arr);
     pstack->arr = NULL;
@@ -21,7 +21,7 @@ void stack_destroy(Stack *pstack){
     pstack->capacity = -1;
 }
 
-/* Поместить значение value на вершину стека */
+///* Поместить значение value на вершину стека *///
 void stack_push(Stack *pstack, Pointer value){
     if (pstack->lenght == pstack->capacity) {
         // extend stack
@@ -38,20 +38,20 @@ void stack_push(Stack *pstack, Pointer value){
     pstack->arr[(pstack->lenght)++] = value;
 }
 
-/* Возвращает количество элементов в стеке (0, если стек пуст) */
+///* Возвращает количество элементов в стеке (0, если стек пуст) *///
 size_t stack_size(Stack *pstack){
     return pstack->lenght;
 }
-/*
- * Возвращает значение с вершины стека, не удаляя его из стека.
- * Если стек пуст, возвращает 0
- */
+
+/// * Возвращает значение с вершины стека, не удаляя его из стека.
+/// * Если стек пуст, возвращает 0
+
 Pointer stack_peek(Stack *pstack) {
     if (pstack->lenght == 0) return 0;
     return pstack->arr[pstack->lenght - 1];
 }
 
-/* Снять значение с вершины стека. Если стек пуст, возвращает 0 */
+///* Снять значение с вершины стека. Если стек пуст, возвращает 0 *///
 Pointer stack_pop(Stack *pstack) {
     if (pstack->lenght == 0) return 0;
     Pointer peek = stack_peek(pstack);
