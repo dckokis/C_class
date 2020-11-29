@@ -38,15 +38,23 @@ void ht_init(HashTable *ht, size_t size, HashFunction hf, Destructor dtor) {
 
 ///* Уничтожить таблицу *///
 void ht_destroy(HashTable *ht) {
-    int i = 0;
-    while (ht->table[i]->key) {
-        ht->dtor(ht->table[i]->data);
-        ht->table[i]->key = NULL;
-    }
-    for (i; i < ht->size; i++) {
-        if (ht->table[i]->next->key) {
-            ht->dtor(ht->table[i]->next->data);
-            ht->table[i]->next->key = NULL;
+    for (int i =0; i < ht->size; i++) {
+        if (ht->table[i]->key == NULL) {
+            break;
+        } else {
+            ht->dtor(ht->table[i]->data);
+            int j = 0;
+            List *current = ht->table[j]->next;
+            while (current->next->key != NULL && j < ht->size) {
+                ht->dtor(current->next->data);
+                current = current->next;
+                j++;
+            }
+            if (current->next->key == NULL) {
+                break;
+            } else if (j >= ht->size) { // no such key in hash table
+                break;
+            }
         }
     }
     ht->table = NULL;
@@ -69,8 +77,7 @@ Pointer ht_set(HashTable *ht, char *key, Pointer data) {
         while (current->next->key != NULL && i < ht->size) {
             current = current->next;
             i++;
-        }
-        if (current->next->key == NULL) {
+        } if (current->next->key == NULL) {
             current->next->key = key;
             current->next->data = data;
         } else if (i >= ht->size) { //extend hash table
@@ -102,8 +109,7 @@ Pointer ht_get(HashTable *ht, char *key) {
         while (current->next->key != key && i < ht->size) {
             current = current->next;
             i++;
-        }
-        if (current->next->key == key) {
+        } if (current->next->key == key) {
             return ht->table[hash]->data;
         } else if (i >= ht->size) { // no such key in hash table
             return 0;
@@ -125,8 +131,7 @@ int ht_has(HashTable *ht, char *key) {
         while (current->next->key != key && i < ht->size) {
             current = current->next;
             i++;
-        }
-        if (current->next->key == key) {
+        } if (current->next->key == key) {
             return 1;
         } else if (i >= ht->size) { // no such key in hash table
             return 0;
