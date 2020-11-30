@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "hash_table.h"
-
 
 ///* Jenkins Hash Function *///
 unsigned jenkins_one_at_a_time_hash(char *key) {
@@ -38,25 +38,28 @@ void ht_init(HashTable *ht, size_t size, HashFunction hf, Destructor dtor) {
 
 ///* Уничтожить таблицу *///
 void ht_destroy(HashTable *ht) {
-    for (int i =0; i < ht->size; i++) {
+    for (int i = 0; i < ht->size; i++) {
         if (ht->table[i]->key == NULL) {
             break;
         } else {
-            ht->dtor(ht->table[i]->data);
+            free(ht->table[i]->data);
+            //ht->dtor(ht->table[i]->data);
+//            ht->table[i]->data = NULL;
+//            ht->table[i]->key = NULL;
             int j = 0;
             List *current = ht->table[j]->next;
             while (current->next->key != NULL && j < ht->size) {
-                ht->dtor(current->next->data);
+                free(current->next->data);
+                //ht->dtor(current->next->data);
+//                current->next->data = NULL;
+//                current->next->key = NULL;
+//                current->next->next = NULL;
                 current = current->next;
                 j++;
             }
-            if (current->next->key == NULL) {
-                break;
-            } else if (j >= ht->size) { // no such key in hash table
-                break;
-            }
         }
     }
+    free(ht->table);
     ht->table = NULL;
     ht->size = -1;
 }
@@ -77,7 +80,8 @@ Pointer ht_set(HashTable *ht, char *key, Pointer data) {
         while (current->next->key != NULL && i < ht->size) {
             current = current->next;
             i++;
-        } if (current->next->key == NULL) {
+        }
+        if (current->next->key == NULL) {
             current->next->key = key;
             current->next->data = data;
         } else if (i >= ht->size) { //extend hash table
@@ -101,15 +105,16 @@ Pointer ht_get(HashTable *ht, char *key) {
     unsigned hash = ht->hashfunc(key) % ht->size;
     if (ht->table[hash]->key == NULL) {
         return 0;
-    } else if (ht->table[hash]->key == key) {
+    } else if (strcmp(ht->table[hash]->key, key) == 0) {
         return ht->table[hash]->data;
     } else {
         int i = 0;
         List *current = ht->table[hash]->next;
-        while (current->next->key != key && i < ht->size) {
+        while (strcmp(ht->table[hash]->key, key) != 0 && i < ht->size) {
             current = current->next;
             i++;
-        } if (current->next->key == key) {
+        }
+        if (strcmp(ht->table[hash]->key, key) == 0) {
             return ht->table[hash]->data;
         } else if (i >= ht->size) { // no such key in hash table
             return 0;
@@ -117,21 +122,21 @@ Pointer ht_get(HashTable *ht, char *key) {
     }
 }
 
-
 ///* Проверка существования ключа key в таблице. 1 - есть, 0 - нет. *///
 int ht_has(HashTable *ht, char *key) {
     unsigned hash = ht->hashfunc(key) % ht->size;
     if (ht->table[hash]->key == NULL) {
         return 0;
-    } else if (ht->table[hash]->key == key) {
+    } else if (strcmp(ht->table[hash]->key, key) == 0) {
         return 1;
     } else {
         int i = 0;
         List *current = ht->table[hash]->next;
-        while (current->next->key != key && i < ht->size) {
+        while (strcmp(current->next->key, key) != 0 && i < ht->size) {
             current = current->next;
             i++;
-        } if (current->next->key == key) {
+        }
+        if (strcmp(current->next->key, key) == 0) {
             return 1;
         } else if (i >= ht->size) { // no such key in hash table
             return 0;
@@ -141,13 +146,14 @@ int ht_has(HashTable *ht, char *key) {
 
 ///* Удалить элемент с ключом key из таблицы (если он есть) *///
 void ht_delete(HashTable *ht, char *key) {
-    if (ht_has(ht, key)) ht->dtor(ht_get(ht, key));
+    unsigned hash = ht->hashfunc(key) % ht->size;
+    if (ht_has(ht, key)) ht->table[hash]->key = NULL;
 }
 
 ///* Обход таблицы с посещением всех элементов. Функция f будет вызвана для
 /// * всех пар (key, data) из таблицы *///
 void ht_traverse(HashTable *ht, void (*f)(char *key, Pointer data)) {
-    for (int i =0; i < ht->size; i++) {
+    for (int i = 0; i < ht->size; i++) {
         if (ht->table[i]->key == NULL) {
             break;
         } else {
@@ -200,7 +206,8 @@ void ht_resize(HashTable *ht, size_t new_size) {
                     while (current->next->key != NULL && j < new_size) {
                         current = current->next;
                         j++;
-                    } if (current->next->key == NULL) {
+                    }
+                    if (current->next->key == NULL) {
                         newtable[hash]->data = ht->table[i]->data;
                         newtable[hash]->key = ht->table[i]->key;
                     }
@@ -209,6 +216,7 @@ void ht_resize(HashTable *ht, size_t new_size) {
             }
         }
         ht->size = new_size;
+        free(ht->table);
         ht->table = newtable;
     }
 }
