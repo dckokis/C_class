@@ -3,6 +3,7 @@
 #include <string.h>
 #include "hash_table.h"
 
+
 ///* Jenkins Hash Function *///
 unsigned jenkins_one_at_a_time_hash(char *key) {
     unsigned hash = 0;
@@ -29,7 +30,7 @@ void ht_init(HashTable *ht, size_t size, HashFunction hf, Destructor dtor) {
     ht->size = size;
     if (hf == 0) ht->hashfunc = jenkins_one_at_a_time_hash;
     ht->dtor = dtor;
-    ht->table = calloc(size, sizeof(struct List));
+    ht->table = calloc(size, sizeof(struct List*));
     if (ht->table == NULL) {
         printf("Memory error\n");
         exit(1);
@@ -39,21 +40,14 @@ void ht_init(HashTable *ht, size_t size, HashFunction hf, Destructor dtor) {
 ///* Уничтожить таблицу *///
 void ht_destroy(HashTable *ht) {
     for (int i = 0; i < ht->size; i++) {
-        if (ht->table[i]->key == NULL) {
+        if (ht->table[i] == NULL) {
             break;
         } else {
-            free(ht->table[i]->data);
-            //ht->dtor(ht->table[i]->data);
-//            ht->table[i]->data = NULL;
-//            ht->table[i]->key = NULL;
+            ht->dtor(ht->table[i]->head.data);
             int j = 0;
-            List *current = ht->table[j]->next;
+            ListNode *current = ht->table[j]->head.next;
             while (current->next->key != NULL && j < ht->size) {
-                free(current->next->data);
-                //ht->dtor(current->next->data);
-//                current->next->data = NULL;
-//                current->next->key = NULL;
-//                current->next->next = NULL;
+                ht->dtor(current->next->data);
                 current = current->next;
                 j++;
             }
@@ -68,34 +62,31 @@ void ht_destroy(HashTable *ht) {
 /// * соотв. поле data будет удалено (dtor) и перезаписано
 Pointer ht_set(HashTable *ht, char *key, Pointer data) {
     unsigned hash = ht->hashfunc(key) % ht->size;
-    if (ht->table[hash]->key == NULL) {
-        ht->table[hash]->key = key;
-        ht->table[hash]->data = data;
-    } else if (ht->table[hash]->next->key == NULL) {
-        ht->table[hash]->next->key = key;
-        ht->table[hash]->next->data = data;
-    } else {
-        int i = 0;
-        List *current = ht->table[hash]->next;
-        while (current->next->key != NULL && i < ht->size) {
-            current = current->next;
-            i++;
+    List *list = ht->table[hash];
+    if (list == NULL) {
+        list = calloc(1, sizeof(struct ListNode));
+        if (list == NULL) {
+            printf("Memory error\n");
+            exit(1);
         }
-        if (current->next->key == NULL) {
-            current->next->key = key;
-            current->next->data = data;
-        } else if (i >= ht->size) { //extend hash table
-            size_t newsize = ht->size * 2;
-            List **newtable = realloc(ht->table, newsize);
-            if (newtable == NULL) {
-                printf("Memory error");
-                exit(1);
-            }
-            ht->table = newtable;
-            ht->size = newsize;
-            current->next->key = key;
-            current->next->data = data;
+        ht->table[hash] = list;
+        list->head.key = key;
+        list->head.data = data;
+        list->head.next = NULL;
+    }else if (strcmp(list->head.key, key) == 0) {
+        list->head.data = data;
+    }
+    else {
+        ListNode *listnext = list->head.next;
+        listnext = calloc(1, sizeof(struct ListNode));
+        if (listnext == NULL) {
+            printf("Memory error\n");
+            exit(1);
         }
+        list->head.next = listnext;
+        listnext->key = key;
+        listnext->data = data;
+        listnext->next = NULL;
     }
     return ht;
 }
@@ -103,21 +94,22 @@ Pointer ht_set(HashTable *ht, char *key, Pointer data) {
 ///* Получить значение по ключу. Если ключа нет в таблице, вернуть 0. *///
 Pointer ht_get(HashTable *ht, char *key) {
     unsigned hash = ht->hashfunc(key) % ht->size;
-    if (ht->table[hash]->key == NULL) {
+    List *list = ht->table[hash];
+    if (list == NULL) {
         return 0;
-    } else if (strcmp(ht->table[hash]->key, key) == 0) {
-        return ht->table[hash]->data;
     } else {
-        int i = 0;
-        List *current = ht->table[hash]->next;
-        while (strcmp(ht->table[hash]->key, key) != 0 && i < ht->size) {
-            current = current->next;
-            i++;
-        }
-        if (strcmp(ht->table[hash]->key, key) == 0) {
-            return ht->table[hash]->data;
-        } else if (i >= ht->size) { // no such key in hash table
-            return 0;
+        if (strcmp(list->head.key, key) == 0) {
+            return list->head.data;
+        } else {
+            ListNode *listnext = list->head.next;
+            while (listnext != NULL) {
+                listnext = listnext->next;
+            }
+            if (strcmp(listnext->key, key) == 0) {
+                return listnext->data;
+            } else {
+                return 0;
+            }
         }
     }
 }
@@ -125,21 +117,22 @@ Pointer ht_get(HashTable *ht, char *key) {
 ///* Проверка существования ключа key в таблице. 1 - есть, 0 - нет. *///
 int ht_has(HashTable *ht, char *key) {
     unsigned hash = ht->hashfunc(key) % ht->size;
-    if (ht->table[hash]->key == NULL) {
+    List *list = ht->table[hash];
+    if (list == NULL) {
         return 0;
-    } else if (strcmp(ht->table[hash]->key, key) == 0) {
-        return 1;
     } else {
-        int i = 0;
-        List *current = ht->table[hash]->next;
-        while (strcmp(current->next->key, key) != 0 && i < ht->size) {
-            current = current->next;
-            i++;
-        }
-        if (strcmp(current->next->key, key) == 0) {
+        if (strcmp(list->head.key, key) == 0) {
             return 1;
-        } else if (i >= ht->size) { // no such key in hash table
-            return 0;
+        } else {
+            ListNode *listnext = list->head.next;
+            while (listnext != NULL) {
+                listnext = listnext->next;
+            }
+            if (strcmp(listnext->key, key) == 0) {
+                return 1;
+            } else {
+                return 0;
+            }
         }
     }
 }
@@ -147,19 +140,19 @@ int ht_has(HashTable *ht, char *key) {
 ///* Удалить элемент с ключом key из таблицы (если он есть) *///
 void ht_delete(HashTable *ht, char *key) {
     unsigned hash = ht->hashfunc(key) % ht->size;
-    if (ht_has(ht, key)) ht->table[hash]->key = NULL;
+    if (ht_has(ht, key)) ht->table[hash]->head.key = NULL;
 }
 
 ///* Обход таблицы с посещением всех элементов. Функция f будет вызвана для
 /// * всех пар (key, data) из таблицы *///
 void ht_traverse(HashTable *ht, void (*f)(char *key, Pointer data)) {
     for (int i = 0; i < ht->size; i++) {
-        if (ht->table[i]->key == NULL) {
+        if (ht->table[i]->head.key == NULL) {
             break;
         } else {
-            f(ht->table[i]->key, ht->table[i]->data);
+            f(ht->table[i]->head.key, ht->table[i]->head.data);
             int j = 0;
-            List *current = ht->table[j]->next;
+            ListNode *current = ht->table[j]->head.next;
             while (current->next->key != NULL && j < ht->size) {
                 f(current->next->key, current->next->data);
                 current = current->next;
@@ -188,28 +181,33 @@ void ht_resize(HashTable *ht, size_t new_size) {
     }
     int not_null = 0;
     for (int i = 0; i < ht->size; i++) {
-        if (ht->table[i]->key != NULL) not_null++;
+        if (ht->table[i] != NULL) not_null++;
     }
     if (not_null > new_size) {
         printf("Not enough space for this action. Please input bigger size. For example:" "%d", not_null);
         exit(1);
     } else {
         for (int i = 0; i < ht->size; i++) {
-            if (ht->table[i]->key != NULL) {
-                unsigned hash = ht->hashfunc(ht->table[i]->key);
-                if (newtable[hash]->key == NULL) {
-                    newtable[hash]->data = ht->table[i]->data;
-                    newtable[hash]->key = ht->table[i]->key;
+            if (ht->table[i] != NULL) {
+                unsigned hash = ht->hashfunc(ht->table[i]->head.key)%new_size;
+                if (newtable[hash] == NULL) {
+                    newtable[hash] = calloc(1, sizeof(struct ListNode));
+                    if(newtable[hash] == NULL) {
+                        printf("Memory error");
+                        exit(1);
+                    }
+                    newtable[hash]->head.data = ht->table[i]->head.data;
+                    newtable[hash]->head.key = ht->table[i]->head.key;
                 } else {
                     int j = 0;
-                    List *current = newtable[hash]->next;
+                    ListNode *current = newtable[hash]->head.next;
                     while (current->next->key != NULL && j < new_size) {
                         current = current->next;
                         j++;
                     }
                     if (current->next->key == NULL) {
-                        newtable[hash]->data = ht->table[i]->data;
-                        newtable[hash]->key = ht->table[i]->key;
+                        newtable[hash]->head.data = ht->table[i]->head.data;
+                        newtable[hash]->head.key = ht->table[i]->head.key;
                     }
 
                 }

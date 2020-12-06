@@ -20,10 +20,9 @@ int main() {
     pc->phone = "02";
     pc->addr = "Kutateladze";
     ht_set(&test_hash, "Police", pc);
+    assert(ht_get(&test_hash, "Police") == pc);
     ht_set(&test_hash, "Ambulance", NULL);
-    assert(!strcmp(ht_get(&test_hash, "Vasya"), "333-45-67"));
-    assert(ht_has(&test_hash, "Police"));
-
+    assert(strcmp(ht_get(&test_hash, "Vasya"), "333-45-67") == 0);
     Contact *pc2 = malloc(sizeof(Contact));
     if (pc2 == NULL) {
         printf("Memory error\n");
@@ -33,6 +32,8 @@ int main() {
     pc2->addr = "NY";
     ht_set(&test_hash, "Police", pc2);
     assert(ht_get(&test_hash, "Police") == pc2);
+    assert(ht_has(&test_hash, "Police"));
+    assert(ht_get(&test_hash, "asdsrfdgf") == 0);
     assert(test_hash.size == 10);
     ht_resize(&test_hash, 20);
     assert(test_hash.size == 20);
@@ -41,5 +42,6 @@ int main() {
     ht_destroy(&test_hash);
     free(pc);
     free(pc2);
+
     return 0;
 }
