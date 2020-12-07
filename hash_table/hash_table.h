@@ -10,12 +10,12 @@ typedef struct ListNode{
     struct ListNode *next;
 } ListNode;
 typedef struct List{
-    ListNode head;
+    ListNode *head;
     size_t sizelist;
 } List;
 typedef struct HashTable {
     size_t size;
-    List **table;
+    List *table;
     HashFunction hashfunc;
     Destructor dtor;
 } HashTable;
